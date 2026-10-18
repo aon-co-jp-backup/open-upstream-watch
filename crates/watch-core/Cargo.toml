@@ -1,0 +1,27 @@
+[package]
+name = "watch-core"
+description = "Upstream release watcher: detects new versions of the projects RPoem re-implements, prepares the Rust-side work in an isolated clone and merges it only through a strict gate."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+watch-types = { path = "../watch-types" }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
+toml = { workspace = true }
+regex = "1"
+chrono = { workspace = true }
+tracing = { workspace = true }
+lettre = { version = "0.11", default-features = false, features = ["smtp-transport", "builder", "rustls-tls"] }
+# external JSON (GitHub / search / LLM responses) is read with size / depth / duplicate-key limits (RS-JSON policy)
+rust-json = { path = "../../../RS-JSON" }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+tokio = { workspace = true }

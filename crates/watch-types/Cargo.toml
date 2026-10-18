@@ -1,0 +1,11 @@
+[package]
+name = "watch-types"
+description = "Types shared by the open-upstream-watch core, server and Leptos dashboard (serde only, wasm-friendly)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { workspace = true }

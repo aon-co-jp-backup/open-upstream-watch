@@ -1,0 +1,145 @@
+{
+  "generated_at": "2026-10-18T23:04:40Z",
+  "config": {
+    "dry_run": true,
+    "auto_merge": true,
+    "allow_code_merge": false,
+    "poll_interval_hours": 6,
+    "porter": "plan",
+    "search_enabled": true,
+    "llm_enabled": true,
+    "check_now_enabled": false,
+    "alert_enabled": true
+  },
+  "upstreams": [
+    {
+      "name": "poem",
+      "repo": "poem",
+      "tag_prefix": "v",
+      "area": "crates/open-runo-poem-compat",
+      "baseline": "3.1.12",
+      "last_seen": "3.1.12",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "port"
+    },
+    {
+      "name": "cosmo-router",
+      "repo": "wundergraph/cosmo",
+      "tag_prefix": "router@",
+      "area": "crates/open-runo-router, open-runo-federation",
+      "baseline": "0.359.0",
+      "last_seen": "0.359.0",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "port"
+    },
+    {
+      "name": "tauri",
+      "repo": "tauri-apps/tauri",
+      "tag_prefix": "tauri-v",
+      "area": "apps/desktop-wasm, desktop-tray",
+      "baseline": "2.12.4",
+      "last_seen": "2.12.4",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "port"
+    },
+    {
+      "name": "react",
+      "repo": "facebook/react",
+      "tag_prefix": "v",
+      "area": "crates/open-runo-view",
+      "baseline": "19.3.1",
+      "last_seen": "19.3.1",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "port"
+    },
+    {
+      "name": "leptos",
+      "repo": "leptos-rs/leptos",
+      "tag_prefix": "v",
+      "area": "open-vsc-claude template (Rust + Leptos)",
+      "baseline": "0.8.22",
+      "last_seen": "0.8.22",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "port"
+    },
+    {
+      "name": "trunk",
+      "repo": "trunk-rs/trunk",
+      "tag_prefix": "v",
+      "area": "open-vsc-claude template (trunk)",
+      "baseline": "0.21.14",
+      "last_seen": "0.21.14",
+      "last_checked": "2026-10-18T23:04:40Z",
+      "last_error": null,
+      "health": "ok",
+      "mode": "notify"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "trunk-0.21.14",
+      "upstream": "trunk",
+      "from": "(previous)",
+      "to": "0.21.14",
+      "status": "notified",
+      "created": "2026-10-18T23:04:40Z",
+      "updated": "2026-10-18T23:04:40Z",
+      "branch": "upstream/trunk-0.21.14",
+      "release_url": "https://github.com/trunk-rs/trunk/releases/tag/v0.21.14",
+      "summary": "SAMPLE DATA — not a real job.\n\nWatch-only upstream: the new version is recorded, nothing is ported.",
+      "log": [
+        "SAMPLE detected (watch only)"
+      ],
+      "merged_commit": null
+    },
+    {
+      "id": "leptos-0.8.22",
+      "upstream": "leptos",
+      "from": "(previous)",
+      "to": "0.8.22",
+      "status": "needs_review",
+      "created": "2026-10-18T23:04:40Z",
+      "updated": "2026-10-18T23:04:40Z",
+      "branch": "upstream/leptos-0.8.22",
+      "release_url": "https://github.com/leptos-rs/leptos/releases/tag/v0.8.22",
+      "summary": "SAMPLE DATA — not a real job.\n\n# leptos — pin update (sample)\n\nThe release notes mention possible breaking changes, so the template pin was prepared on a branch for review instead of being merged.",
+      "log": [
+        "SAMPLE detected",
+        "SAMPLE pin src/catalog.ts updated",
+        "SAMPLE needs review: the release notes mention possible breaking changes"
+      ],
+      "merged_commit": null
+    },
+    {
+      "id": "poem-3.1.12",
+      "upstream": "poem",
+      "from": "(previous)",
+      "to": "3.1.12",
+      "status": "merged",
+      "created": "2026-10-18T23:04:40Z",
+      "updated": "2026-10-18T23:04:40Z",
+      "branch": "upstream/poem-3.1.12",
+      "release_url": "https://crates.io/crates/poem/3.1.12",
+      "summary": "SAMPLE DATA — not a real job.\n\n# poem — porting plan (sample)\n\nA docs-only plan under docs/upstream/ passed the gate and was merged.",
+      "log": [
+        "SAMPLE detected",
+        "SAMPLE plan written",
+        "SAMPLE changed files: docs/upstream/poem/…md",
+        "SAMPLE merged into main"
+      ],
+      "merged_commit": "0123456789abcdef"
+    }
+  ],
+  "running": false,
+  "demo": true
+}

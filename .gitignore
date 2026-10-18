@@ -1,0 +1,7 @@
+/target
+/ui/target
+/ui/dist
+/work/
+/state.json
+/config.toml
+*.log

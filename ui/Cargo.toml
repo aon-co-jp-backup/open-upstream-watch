@@ -1,0 +1,22 @@
+[package]
+name = "open-upstream-watch-ui"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Leptos (CSR / WASM, built with trunk) dashboard for open-upstream-watch."
+
+[dependencies]
+leptos = { version = "0.7", features = ["csr"] }
+gloo-net = { version = "0.6", features = ["http", "json"] }
+gloo-timers = { version = "0.3", features = ["futures"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+watch-types = { path = "../crates/watch-types" }
+web-sys = { version = "0.3", features = ["Window", "Location"] }
+console_error_panic_hook = "0.1"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"

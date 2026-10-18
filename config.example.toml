@@ -1,0 +1,109 @@
+# open-upstream-watch — example configuration.  Copy to config.toml (git-ignored) and adjust.
+# Secrets never go in this file: tokens live in txt files whose paths are given below, and the SMTP settings come from
+# the same environment variables open-easy-web uses (OPEN_EASYWEB_SMTP_HOST / _PORT / _USERNAME / _PASSWORD / _FROM).
+
+poll_interval_hours = 6
+# First run: keep true. Nothing is written to the target repositories; jobs only produce a plan you can read in the
+# dashboard.  Switch to false once the plans look right.
+dry_run = true
+state_file = "state.json"
+base_path = "/leptos-rs"      # the app is served at https://easy-web.tokyo/leptos-rs/
+ui_dist = "ui/dist"
+# github_token_file = "F:/github-token.txt"   # optional: raises the GitHub API limit (read access is enough)
+
+[auth]
+# Only these addresses can log in (one-time password through open-easy-web). Keep your address HERE, not in the repository.
+allowed_emails = []           # e.g. ["you@example.org"]
+otp_base_url = "http://127.0.0.1:8080"   # open-easy-web as seen from this server
+session_hours = 12
+cookie_secure = true          # false only for plain-http local tests
+
+[alert]
+# Disappearance alerts (an upstream deleted / archived / renamed) are mailed here via the shared SMTP account.
+to = []                       # e.g. ["you@example.org"]
+
+# aruaru-search (the project's own unlimited meta-search) and aruaru-llm (small local model; open-cuda accelerates it on a GPU machine).
+# Inside the VPS use the loopback addresses; from a PC use an SSH tunnel.  Both are optional and best-effort.
+[search]
+url = "http://127.0.0.1:4610"
+[llm]
+url = "http://127.0.0.1:4600"
+
+# What is done for an upstream that has no `pin`: "plan" writes docs/upstream/<name>/<version>.md,
+# "command" runs an external command in the clone (for example Claude Code headless) - its changes still pass the gate.
+[porter]
+kind = "plan"
+
+# RPoem: the default target. Automatic merges are limited to docs/upstream/ unless allow_code_merge = true.
+[rpoem]
+remote = "https://github.com/aon-co-jp/RPoem.git"
+clone_dir = "work/RPoem"
+base_branch = "main"
+test_cmd = "cargo check -p open-runo-gateway"
+auto_merge = true
+allow_code_merge = false
+docs_paths = ["docs/upstream/"]
+code_paths = ["crates/"]
+max_merges_per_day = 3
+
+# open-vsc-claude: keeps the Rust + Leptos template's pinned Leptos version current. The real end-to-end test
+# (npm run test:leptos: trunk build + Chromium) is the gate, so code merges of the one pinned file are allowed.
+# This target needs Rust, trunk, Python and Chromium on the machine that runs the bot (a PC, not the small VPS).
+[[target]]
+name = "open-vsc-claude"
+remote = "https://github.com/aon-co-jp/open-vsc-claude.git"
+clone_dir = "work/open-vsc-claude"
+base_branch = "main"
+test_cmd = "npm ci && npm run compile && npm test && npm run test:leptos"
+auto_merge = true
+allow_code_merge = true
+docs_paths = ["docs/"]
+code_paths = ["src/catalog.ts"]
+max_merges_per_day = 2
+
+# ---- upstreams RPoem re-implements (new stable versions create work) ----
+[[upstream]]
+name = "poem"
+# poem publishes new versions only on crates.io (its GitHub releases stop at v2.0.0)
+kind = "crate"
+repo = "poem"
+tag_prefix = "v"
+area = "crates/open-runo-poem-compat"
+
+[[upstream]]
+name = "cosmo-router"
+repo = "wundergraph/cosmo"
+tag_prefix = "router@"
+area = "crates/open-runo-router, open-runo-federation"
+
+[[upstream]]
+name = "tauri"
+repo = "tauri-apps/tauri"
+tag_prefix = "tauri-v"
+area = "apps/desktop-wasm, desktop-tray"
+
+[[upstream]]
+name = "react"
+repo = "facebook/react"
+tag_prefix = "v"
+area = "crates/open-runo-view"
+
+# ---- Rust + Leptos (WASM, trunk): the template's pins ----
+[[upstream]]
+name = "leptos"
+repo = "leptos-rs/leptos"
+tag_prefix = "v"
+target = "open-vsc-claude"
+area = "open-vsc-claude template (Rust + Leptos)"
+[upstream.pin]
+file = "src/catalog.ts"
+pattern = 'leptos = \{ version = "([0-9.]+)"'
+format = "major.minor"
+max_auto_bump = "minor"
+
+[[upstream]]
+name = "trunk"
+repo = "trunk-rs/trunk"
+tag_prefix = "v"
+mode = "notify"
+area = "open-vsc-claude template (trunk)"
