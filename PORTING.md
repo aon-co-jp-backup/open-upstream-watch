@@ -17,6 +17,12 @@
 4. systemd サービス `open-upstream-watch.service`(ポート 4680、127.0.0.1)。`/root/open-web-server/domains.toml` に `path_prefix = "/leptos-rs"`(`strip_prefix = false`、アプリが `base_path` で受ける)を追加して `open-web-server` を再起動。変更前は `domains.toml.bak-…` に退避。
 5. 確認: `/leptos-rs/demo/` が 200、`/leptos-rs/api/status` が 401(未ログイン)、`--test-alert` でメールが届く、ログインできる。
 
+### 配置後に分かったこと(2026-10-19)
+- **VPS に配置済み**(`https://easy-web.tokyo/leptos-rs/`、デモ `/demo/`。サービス `open-upstream-watch.service`、設定 `/root/open-upstream-watch-data/config.toml`、SMTP 設定 `/root/open-upstream-watch-smtp.env`〈600〉)。公開 URL・実ブラウザ(デスクトップ/スマホ幅)で確認済み。
+- 最初の周回で、**消失アラートが本物の変更を検出**: `facebook/react` は `react/react` へ移転していた(設定を更新済み)。
+- **本番の `open-easy-web` の Gmail 認証情報が無効**(SMTP 535)。`open-easy-web` 自身の `request-otp` も 500 を返す。複製した設定は元と同一(ハッシュ一致)なので、原因は元の設定。**直さない限り、ログイン用の OTP メールもアラートメールも届かない**。対処: Google アカウントでアプリパスワードを作り直し、`open-easy-web` の環境変数と `/root/open-upstream-watch-smtp.env` の両方を更新して、`systemctl restart` + `--test-alert`。
+- ログインとアラートメールの実機確認は、上の修正後に行う(未了)。
+
 ### 次の手
 1. 配置と上の確認。2. `dry_run = true` のまま数周回し、計画の中身を確認。3. 問題なければ `dry_run = false`(RPoem は docs のみ自動マージ)。4. Leptos 0.8 への版上げが `npm run test:leptos` で通るかを PC で確認(通らなければテンプレート側の修正が先)。
 
@@ -33,6 +39,12 @@
 3. SMTP: copy the same `OPEN_EASYWEB_SMTP_*` variables open-easy-web uses into a root-only (600) `smtp.env` on the server and load it with `EnvironmentFile=` (never print the values).
 4. systemd unit `open-upstream-watch.service` (127.0.0.1:4680); add `path_prefix = "/leptos-rs"` (`strip_prefix = false`, the app handles `base_path` itself) to `/root/open-web-server/domains.toml` and restart `open-web-server`; back the file up first (`domains.toml.bak-…`).
 5. Check: `/leptos-rs/demo/` is 200, `/leptos-rs/api/status` is 401 when logged out, `--test-alert` delivers a mail, login works.
+
+### After deployment (2026-10-19)
+- **Deployed on the VPS** (`https://easy-web.tokyo/leptos-rs/`, demo at `/demo/`; service `open-upstream-watch.service`, config `/root/open-upstream-watch-data/config.toml`, SMTP settings `/root/open-upstream-watch-smtp.env` (600)). Verified on the public URLs in a real browser (desktop and phone widths).
+- The first cycle's **disappearance alert caught a real change**: `facebook/react` moved to `react/react` (config updated).
+- **The Gmail credentials of the production `open-easy-web` are invalid** (SMTP 535); `open-easy-web`'s own `request-otp` returns 500 as well. The copied settings are identical to the original (hashes match), so the cause is the original setting. **Until it is fixed neither login OTP mails nor alert mails arrive.** Fix: create a new Google app password, update both the `open-easy-web` environment and `/root/open-upstream-watch-smtp.env`, then `systemctl restart` and `--test-alert`.
+- Real login and alert-mail delivery have to be verified after that fix (not done yet).
 
 ### Next
 Deploy and verify; run a few cycles in `dry_run = true` and read the plans; then switch to `dry_run = false` (RPoem merges docs only); check on a PC that the Leptos 0.8 bump passes `npm run test:leptos` (if not, the template needs fixing first).

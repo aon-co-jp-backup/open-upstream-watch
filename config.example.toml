@@ -84,7 +84,8 @@ area = "apps/desktop-wasm, desktop-tray"
 
 [[upstream]]
 name = "react"
-repo = "facebook/react"
+# facebook/react moved to react/react (found by this tool's own rename alert on 2026-10-19)
+repo = "react/react"
 tag_prefix = "v"
 area = "crates/open-runo-view"
 

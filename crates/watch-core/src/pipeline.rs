@@ -102,7 +102,7 @@ pub async fn run_cycle<N: Notifier>(cfg: &Config, state: &mut State, gh: &Github
                         entry.alerted = Some(h.clone());
                         out.push(format!("{}: ALERT sent ({h})", u.name));
                     }
-                    Err(e) => out.push(format!("{}: alert could not be sent ({h}): {e}", u.name)),
+                    Err(e) => out.push(format!("{}: alert could not be sent ({h}): {e:#}", u.name)),
                 }
             }
             if entry.health == "missing" {
@@ -257,8 +257,8 @@ async fn process_job(cfg: &Config, state: &mut State, idx: usize, upstream: &Ups
         Ok(()) => format!("{id}: {:?}", j.status),
         Err(e) => {
             j.status = JobStatus::Failed;
-            log(j, format!("error: {e}"));
-            format!("{id}: failed: {e}")
+            log(j, format!("error: {e:#}"));
+            format!("{id}: failed: {e:#}")
         }
     }
 }
