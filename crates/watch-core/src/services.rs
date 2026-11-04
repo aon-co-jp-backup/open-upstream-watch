@@ -30,8 +30,8 @@ fn encode(q: &str) -> String {
 }
 
 pub async fn search(base: &str, query: &str, n: usize) -> Result<Vec<Hit>> {
-    let url = format!("{}/v1/search?q={}&hl=en&n={}", base.trim_end_matches('/'), encode(query), n);
-    let resp = client()?.get(url).send().await?;
+    let url = format!("{}/aruaru_search.v1.Search/Search", base.trim_end_matches('/'));
+    let resp = client()?.post(url).json(&serde_json::json!({ "q": query, "hl": "en", "n": n })).send().await?;
     if !resp.status().is_success() {
         bail!("aruaru-search returned {}", resp.status());
     }
