@@ -127,7 +127,7 @@ pub struct AuthConfig {
     /// Only these e-mail addresses may log in. Empty = nobody (the dashboard stays locked; the demo stays public).
     #[serde(default)]
     pub allowed_emails: Vec<String>,
-    /// open-easy-web's address as seen from this server (its `/api/auth/request-otp` and `/verify-otp` are used).
+    /// open-easy-web's address as seen from this server (its Connect calls `/open_easy_web.admin.v1.Auth/RequestOtp` and `/VerifyOtp` are used; the old REST `/api/auth/request-otp` and `/verify-otp` are deprecated).
     #[serde(default = "d_otp_base")]
     pub otp_base_url: String,
     #[serde(default = "d_session_hours")]

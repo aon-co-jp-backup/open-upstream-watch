@@ -179,7 +179,7 @@ async fn login_request(Data(s): Data<&Arc<AppState>>, Json(req): Json<EmailReq>)
     }
     // The answer never reveals whether the address is allowed.
     if let Some(contact) = s.canonical(&req.email) {
-        let url = format!("{}/api/auth/request-otp", s.cfg.auth.otp_base_url.trim_end_matches('/'));
+        let url = format!("{}/open_easy_web.admin.v1.Auth/RequestOtp", s.cfg.auth.otp_base_url.trim_end_matches('/'));
         match s.http.post(url).json(&json!({ "contact": contact })).send().await {
             Ok(r) if r.status().is_success() => {}
             Ok(r) => tracing::warn!("open-easy-web request-otp answered {}", r.status()),
@@ -208,7 +208,7 @@ async fn login_verify(Data(s): Data<&Arc<AppState>>, jar: &CookieJar, Json(req):
     let Some(contact) = s.canonical(&req.email) else {
         return err(StatusCode::UNAUTHORIZED, "invalid or expired code");
     };
-    let url = format!("{}/api/auth/verify-otp", s.cfg.auth.otp_base_url.trim_end_matches('/'));
+    let url = format!("{}/open_easy_web.admin.v1.Auth/VerifyOtp", s.cfg.auth.otp_base_url.trim_end_matches('/'));
     let mut body = json!({ "contact": contact, "code": req.code.trim() });
     if let Some(t) = &req.totp_code {
         body["totp_code"] = json!(t.trim());
