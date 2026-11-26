@@ -99,7 +99,7 @@ async fn the_dashboard_is_locked_until_the_one_time_password_is_verified() {
     // the allowed address: the request is forwarded to open-easy-web
     let r = cli.post("/leptos-rs/api/login/request").body_json(&json!({"email": "OWNER@example.org"})).send().await;
     r.assert_status_is_ok();
-    assert!(log.lock().unwrap().iter().any(|(p, b)| p.ends_with("/open_easy_web.admin.v1.Auth/RequestOtp") && b.contains("owner@example.org")));
+    assert!(log.lock().unwrap().iter().any(|(p, b)| p.ends_with("/open_easy_web.admin.Auth/RequestOtp") && b.contains("owner@example.org")));
 
     // wrong code
     let r = cli.post("/leptos-rs/api/login/verify").body_json(&json!({"email": "owner@example.org", "code": "000000"})).send().await;
